@@ -1,0 +1,6 @@
+C:\Users\whale\source\repos\JacksonKisling\KotivWeatherApp\Data\bin\Debug\Data.dacpac
+C:\Users\whale\source\repos\JacksonKisling\KotivWeatherApp\Data\bin\Debug\Data.dll
+C:\Users\whale\source\repos\JacksonKisling\KotivWeatherApp\Data\bin\Debug\Data.pdb
+C:\Users\whale\source\repos\JacksonKisling\KotivWeatherApp\Data\obj\Debug\Data.sqlproj.AssemblyReference.cache
+C:\Users\whale\source\repos\JacksonKisling\KotivWeatherApp\Data\obj\Debug\Data.dll
+C:\Users\whale\source\repos\JacksonKisling\KotivWeatherApp\Data\obj\Debug\Data.pdb

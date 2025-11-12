@@ -1,0 +1,14 @@
+﻿CREATE TABLE [dbo].[ApiLog]
+(
+    [ApiLogId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY CLUSTERED,
+    [Apiname] NVARCHAR(100) NOT NULL,
+    [RequestUrl] NVARCHAR(1000) NOT NULL,
+    [RequestPayload] NVARCHAR(MAX) NOT NULL,
+    [ResponsePayload] NVARCHAR(MAX) NOT NULL,
+    [StatusCode] INT NULL,
+    [Timestamp] DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
+    [ElapsedMs] INT NULL
+);
+GO
+CREATE NONCLUSTERED INDEX IX_Timestamp ON Apilog (Timestamp DESC);
+GO

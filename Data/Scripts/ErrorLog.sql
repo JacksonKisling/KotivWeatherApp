@@ -1,0 +1,8 @@
+﻿CREATE TABLE [dbo].[ErrorLog]
+(
+    [ErrorId] INT IDENTITY(1,1) PRIMARY KEY,
+    [ErrorMessage] NVARCHAR(4000) NOT NULL,
+    [StackTrace] NVARCHAR(MAX) NULL,
+    [ErrorSource] NVARCHAR(200) NULL,
+    [Timestamp] DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
