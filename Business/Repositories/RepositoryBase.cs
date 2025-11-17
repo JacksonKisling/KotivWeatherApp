@@ -1,35 +1,82 @@
-﻿using Dapper;
-using System.Collections.Generic;
-using System.Data;
-using System.Threading.Tasks;
+﻿using System.Data;
+using Microsoft.Data.SqlClient;
+using Dapper;
 
 namespace Business.Repositories
 {
-    public class RepositoryBase<T> where T : class, new()
+    public abstract class RepositoryBase<T>
     {
-        protected readonly string _connectionString;
+        private readonly string? _connectionString;
+        private readonly IDbConnection? _externalConnection;
 
-        public RepositoryBase(string connectionString)
+        protected RepositoryBase(string connectionString)
         {
             _connectionString = connectionString;
         }
 
-        protected async Task<IEnumerable<T>> QueryAsync(string sql, object? parameters = null)
+        protected RepositoryBase(IDbConnection connection)
         {
-            using var db = new DataAccess.DatabaseContext(_connectionString);
-            return await db.Connection.QueryAsync<T>(sql, parameters);
+            _externalConnection = connection;
         }
 
-        protected async Task<int> ExecuteAsync(string sql, object? parameters = null)
+        protected IDbConnection OpenConnection()
         {
-            using var db = new DataAccess.DatabaseContext(_connectionString);
-            return await db.Connection.ExecuteAsync(sql, parameters);
+            if (_externalConnection != null)
+            {
+                return _externalConnection;
+            }
+
+            if (_connectionString == null)
+                throw new InvalidOperationException("No connection string provided.");
+
+            var conn = new SqlConnection(_connectionString);
+            conn.Open();
+            return conn;
         }
 
-        protected async Task<T?> QuerySingleAsync(string sql, object? parameters = null)
+        public async Task<int> ExecuteAsync(string sql, object? param = null)
         {
-            using var db = new DataAccess.DatabaseContext(_connectionString);
-            return await db.Connection.QuerySingleOrDefaultAsync<T>(sql, parameters);
+            try
+            {
+                using var conn = OpenConnection();
+                return await conn.ExecuteAsync(sql, param);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("SQL ERROR in ExecuteAsync:");
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+        }
+
+        public async Task<T?> QuerySingleAsync(string sql, object? param = null)
+        {
+            try
+            {
+                using var conn = OpenConnection();
+                return await conn.QuerySingleOrDefaultAsync<T>(sql, param);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("SQL ERROR in QuerySingleAsync:");
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<T>> QueryAsync(string sql, object? param = null)
+        {
+            try
+            {
+                using var conn = OpenConnection();
+                return await conn.QueryAsync<T>(sql, param);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("SQL ERROR in QueryAsync:");
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
         }
     }
 }

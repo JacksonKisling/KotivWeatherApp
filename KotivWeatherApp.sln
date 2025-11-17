@@ -1,13 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36603.0 d17.14
+VisualStudioVersion = 17.14.36603.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KotivWeatherApp", "KotivWeatherApp\KotivWeatherApp.csproj", "{4D1AF68F-C3EA-4EA5-818B-955DEB94B790}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{2AB70CB1-2C9A-4CE1-8FFB-EBA7F24ACECE}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Data", "Data\Data.sqlproj", "{FA05F150-EA2A-40E2-BBE5-E0211A8F3C3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KotivWeatherApp.Tests", "KotivWeatherApp.Tests\KotivWeatherApp.Tests.csproj", "{8E9728F6-9418-4ED7-9FD2-3BB2DD373187}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KotivWeatherApp.MVC", "KotivWeatherApp.MVC\KotivWeatherApp.MVC.csproj", "{E79249BA-1EDF-4C70-93B5-E8EB0769C310}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +22,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4D1AF68F-C3EA-4EA5-818B-955DEB94B790}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4D1AF68F-C3EA-4EA5-818B-955DEB94B790}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4D1AF68F-C3EA-4EA5-818B-955DEB94B790}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4D1AF68F-C3EA-4EA5-818B-955DEB94B790}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2AB70CB1-2C9A-4CE1-8FFB-EBA7F24ACECE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2AB70CB1-2C9A-4CE1-8FFB-EBA7F24ACECE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AB70CB1-2C9A-4CE1-8FFB-EBA7F24ACECE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -29,6 +32,14 @@ Global
 		{FA05F150-EA2A-40E2-BBE5-E0211A8F3C3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA05F150-EA2A-40E2-BBE5-E0211A8F3C3E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FA05F150-EA2A-40E2-BBE5-E0211A8F3C3E}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{8E9728F6-9418-4ED7-9FD2-3BB2DD373187}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E9728F6-9418-4ED7-9FD2-3BB2DD373187}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E9728F6-9418-4ED7-9FD2-3BB2DD373187}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E9728F6-9418-4ED7-9FD2-3BB2DD373187}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E79249BA-1EDF-4C70-93B5-E8EB0769C310}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E79249BA-1EDF-4C70-93B5-E8EB0769C310}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E79249BA-1EDF-4C70-93B5-E8EB0769C310}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E79249BA-1EDF-4C70-93B5-E8EB0769C310}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,7 +1,5 @@
-﻿using System.Net.Http;
+﻿using Business.Models;
 using System.Text.Json;
-using System.Threading.Tasks;
-using Business.Services.Models;
 
 namespace Business.Services
 {
@@ -34,7 +32,8 @@ namespace Business.Services
                 if (!response.IsSuccessStatusCode)
                     return null;
 
-                var result = JsonSerializer.Deserialize<GoogleGeocodeResponse>(json);
+                var result = JsonSerializer.Deserialize<GoogleGeocodeResponse>(json,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 return result?.Results?.FirstOrDefault()?.Geometry?.Location;
             }
             catch (Exception ex)
@@ -43,5 +42,29 @@ namespace Business.Services
                 return null;
             }
         }
+
+        public async Task<string?> ReverseGeocodeAsync(double lat, double lng)
+        {
+            var url = $"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lng}&key={_apiKey}";
+
+            try
+            {
+                var response = await _httpClient.GetStringAsync(url);
+                var json = JsonDocument.Parse(response);
+
+                var results = json.RootElement.GetProperty("results");
+
+                if (results.GetArrayLength() == 0)
+                    return null;
+
+                return results[0].GetProperty("formatted_address").GetString();
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogErrorAsync(ex);
+                return null;
+            }
+        }
+
     }
 }

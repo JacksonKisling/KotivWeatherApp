@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - KotivWeatherApp</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header class="border-bottom mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">KotivWeatherApp</a>
+
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a id="openFlyout"
+                       class="nav-link"
+                       href="javascript:void(0);">
+                        Recent Searches
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="ApiLog" asp-action="Index">API Log</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="ErrorLog" asp-action="Index">Error Log</a>
+                </li>
+
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    <div id="historyFlyout" class="history-flyout">
+        <div class="history-header">
+            <h4>Recent Searches</h4>
+            <button id="closeFlyout" class="btn btn-secondary btn-sm">Close</button>
+        </div>
+        <div id="historyContent" class="history-content">
+            Loading...
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js"></script>
+    <script src="~/js/map.js"></script>
+
+    <script async
+            src="https://maps.googleapis.com/maps/api/js?key=@ViewBag.GoogleMapsApiKey&callback=initializeMap">
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

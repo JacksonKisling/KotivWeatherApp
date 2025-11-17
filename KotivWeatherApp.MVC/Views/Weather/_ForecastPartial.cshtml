@@ -1,0 +1,56 @@
+﻿@model Business.Models.WeatherForecastResponse
+
+<div id="forecastRoot"
+     data-lat="@Model.Latitude"
+     data-lon="@Model.Longitude">
+
+    @if (ViewBag?.LocationName != null)
+    {
+        <h4><strong>@ViewBag.LocationName</strong></h4>
+    }
+
+    @if (Model?.Properties?.Periods != null)
+    {
+        <div class="row">
+            @foreach (var p in Model.Properties.Periods.Take(10))
+            {
+                var forecast = p.ShortForecast ?? string.Empty;
+                var cssClass =
+                forecast.Contains("Rain", StringComparison.OrdinalIgnoreCase) ? "rain" :
+                forecast.Contains("Snow", StringComparison.OrdinalIgnoreCase) ? "snow" :
+                forecast.Contains("Cloud", StringComparison.OrdinalIgnoreCase) ? "cloudy" :
+                forecast.Contains("Sunny", StringComparison.OrdinalIgnoreCase) ||
+                forecast.Contains("Clear", StringComparison.OrdinalIgnoreCase) ? "sunny" :
+                "";
+
+                <div class="col-md-6 col-lg-4 mb-3">
+                    <div class="card shadow-sm weather-card @cssClass">
+                        <div class="card-body d-flex align-items-center">
+
+                            <!-- ICON -->
+                            <img src="@p.Icon"
+                                 alt="@p.ShortForecast"
+                                 class="weather-icon me-3" />
+
+                            <!-- TEXT -->
+                            <div>
+                                <h5 class="card-title mb-1">@p.Name</h5>
+                                <p class="card-text mb-1">
+                                    <strong>@p.Temperature°@p.TemperatureUnit</strong>
+                                </p>
+                                <p class="text-muted mb-0">@p.ShortForecast</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">No forecast available.</p>
+    }
+
+</div>
+

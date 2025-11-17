@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Business.Models.SearchHistoryRecord>
+
+<div class="history-list">
+    <h4>Recent Searches</h4>
+
+    @if (!Model.Any())
+    {
+        <p class="text-muted">No recent searches yet.</p>
+    }
+    else
+    {
+        <p class="text-muted">Click a search to re-run it.</p>
+        <ul class="list-group">
+            @foreach (var item in Model)
+            {
+                <li class="list-group-item recent-item"
+                    data-lat="@item.Latitude"
+                    data-lng="@item.Longitude"
+                    data-name="@item.SearchTerm">
+
+                    <b>@item.SearchTerm</b><br />
+                    <small>
+                        @item.Latitude, @item.Longitude<br />
+                        @item.ResultSummary<br />
+                        @item.SearchTimestamp.ToLocalTime()
+                    </small>
+                </li>
+            }
+        </ul>
+    }
+</div>
+
+<style>
+    .history-list {
+        padding: 20px;
+    }
+
+        .history-list ul {
+            margin-top: 10px;
+        }
+</style>

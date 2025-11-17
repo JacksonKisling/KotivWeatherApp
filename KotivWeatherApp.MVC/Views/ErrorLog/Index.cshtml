@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Business.Models.ErrorLogRecord>
+
+@{
+    ViewData["Title"] = "Error Log";
+}
+
+<h2>Error Log</h2>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">No errors logged.</p>
+}
+else
+{
+    <table class="table table-striped table-bordered mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Message</th>
+                <th>Source</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var e in Model)
+            {
+                <tr>
+                    <td>@e.ErrorId</td>
+                    <td>
+                        <strong>@e.ErrorMessage</strong><br />
+                        <small class="text-muted">
+                            @e.StackTrace
+                        </small>
+                    </td>
+                    <td>@e.ErrorSource</td>
+                    <td>@e.Timestamp.ToLocalTime()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
