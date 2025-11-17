@@ -1,0 +1,35 @@
+# Visual Studio
+.vs/
+*.vc.db
+*.user
+*.suo
+*.sln.docstates
+
+# Build output
+bin/
+obj/
+out/
+
+# Package management
+packages/
+*.nupkg
+*.snupkg
+
+# ASP.NET / EF
+appsettings.Development.json
+*.dbmdl
+
+# SQL LocalDB files
+*.mdf
+*.ldf
+
+# Logs
+*.log
+
+# Test results
+TestResult*/
+*.coverage
+*.coveragexml
+
+# Publish output
+publish/

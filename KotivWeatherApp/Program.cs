@@ -1,27 +1,42 @@
-using KotivWeatherApp.Components;
+using Business.Repositories;
+using Business.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+// MVC/Pages + Blazor
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor().AddCircuitOptions(options =>
+{
+    options.DetailedErrors = true;
+});
+
+// config
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
+var googleApiKey = builder.Configuration["GoogleMaps:ApiKey"] ?? "";
+
+// repositories
+builder.Services.AddScoped<IErrorLogRepository>(sp => new ErrorLogRepository(connectionString));
+builder.Services.AddScoped<IApiLogRepository>(sp => new ApiLogRepository(connectionString));
+builder.Services.AddScoped<ISearchHistoryRepository>(sp => new SearchHistoryRepository(connectionString));
+
+// services
+builder.Services.AddScoped<LoggingService>();
+builder.Services.AddScoped(sp => new WeatherService(new HttpClient(), sp.GetRequiredService<LoggingService>()));
+builder.Services.AddScoped(sp => new GoogleMapsService(new HttpClient(), sp.GetRequiredService<LoggingService>(), googleApiKey));
+builder.Services.AddScoped(sp => new SearchHistoryService(connectionString));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    app.UseExceptionHandler("/Error");
 }
 
-app.UseHttpsRedirection();
-
 app.UseStaticFiles();
-app.UseAntiforgery();
 
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+app.UseRouting();
+
+app.MapBlazorHub();
+app.MapFallbackToPage("/_Host"); // this is the Blazor host page
 
 app.Run();

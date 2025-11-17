@@ -1,0 +1,94 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.history-flyout {
+    position: fixed;
+    top: 0;
+    right: -350px;
+    width: 350px;
+    height: 100%;
+    background: white;
+    border-left: 2px solid #ccc;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+    padding: 15px;
+    transition: right 0.3s ease;
+    z-index: 9999;
+}
+
+    .history-flyout.open {
+        right: 0;
+    }
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.history-content {
+    margin-top: 10px;
+    overflow-y: auto;
+    max-height: calc(100% - 60px);
+}
+
+.weather-card {
+    border-radius: 10px;
+    transition: transform 0.1s ease-in-out;
+}
+
+.weather-card.sunny {
+    background: #fff8e1;
+}
+
+.weather-card.cloudy {
+    background: #eceff1;
+}
+
+.weather-card.rain {
+    background: #e3f2fd;
+}
+
+.weather-card.snow {
+    background: #f0f4ff;
+}
+
+
+.weather-card:hover {
+    transform: scale(1.03);
+}
+
+.weather-icon {
+    width: 60px;
+    height: 60px;
+}
+
+.card-title {
+    font-weight: 600;
+}
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+

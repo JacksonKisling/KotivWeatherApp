@@ -1,0 +1,119 @@
+﻿@page "/"
+@namespace KotivWeatherApp.Pages
+@using Business.Services;
+@inject WeatherService WeatherService
+@inject GoogleMapsService GoogleMapsService
+@inject SearchHistoryService SearchHistoryService
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+
+<div id="map" style="height: 400px; width: 100%; margin-bottom: 20px;"></div>
+
+<div class="search-bar mb-3">
+    <input @bind="SearchTerm" placeholder="Enter a city or address" class="form-control" />
+    <button class="btn btn-primary mt-2" @onclick="OnSearchClicked">Search</button>
+</div>
+
+@if (Forecast != null)
+{
+    <div class="forecast mt-4">
+        <h5>5-Day Forecast</h5>
+        <ul>
+            @foreach (var period in Forecast.Properties?.Periods ?? new())
+            {
+                <li><b>@period.Name:</b> @period.Temperature@period.TemperatureUnit - @period.ShortForecast</li>
+            }
+        </ul>
+    </div>
+}
+
+@code {
+    private string? SearchTerm;
+    private Business.Services.Models.WeatherForecastResponse? Forecast;
+
+    private async Task OnSearchClicked()
+    {
+        if (string.IsNullOrWhiteSpace(SearchTerm))
+            return;
+
+        // 1. Geocode address → coordinates
+        var location = await GoogleMapsService.GetCoordinatesAsync(SearchTerm);
+        if (location == null)
+        {
+            Console.WriteLine("No coordinates found.");
+            return;
+        }
+
+        // 2. Move the map smoothly to the new location
+        await JS.InvokeVoidAsync(
+            "moveMapTo",
+            location.Lat,
+            location.Lng
+        );
+
+        // 3. Fetch forecast
+        Forecast = await WeatherService.GetForecastAsync(location.Lat, location.Lng);
+
+        // 4. Log search in DB
+        await SearchHistoryService.AddSearchAsync(
+            SearchTerm,
+            location.Lat,
+            location.Lng,
+            Forecast?.Properties?.Periods?.FirstOrDefault()?.ShortForecast
+        );
+
+        // 5. Update UI
+        StateHasChanged();
+    }
+
+
+    private DotNetObjectReference<Index>? objRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                objRef = DotNetObjectReference.Create(this);
+
+                await JS.InvokeVoidAsync(
+                    "initializeMap",
+                    42.032974,
+                    -93.581543,
+                    objRef
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("MAP INIT ERROR:");
+                Console.WriteLine(ex.ToString());
+            }
+        }
+    }
+
+
+    [JSInvokable]
+    public async Task OnMapClicked(double lat, double lng)
+    {
+        Forecast = await WeatherService.GetForecastAsync(lat, lng);
+
+        await SearchHistoryService.AddSearchAsync(
+            $"Clicked @ {lat},{lng}",
+            lat,
+            lng,
+            Forecast?.Properties?.Periods?.FirstOrDefault()?.ShortForecast
+        );
+
+        StateHasChanged();
+    }
+
+
+    public ValueTask DisposeAsync()
+    {
+        objRef?.Dispose();
+        return ValueTask.CompletedTask;
+    }
+
+}

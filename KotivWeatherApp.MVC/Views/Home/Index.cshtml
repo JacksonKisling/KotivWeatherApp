@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Kotiv Weather App";
+}
+
+<div class="container mt-4">
+
+    <h2>Kotiv Weather App</h2>
+
+    <div id="map" style="height: 400px; width: 100%; margin-bottom: 20px;"></div>
+
+    <div class="search-bar mb-3">
+        <input id="searchBox" class="form-control" placeholder="Enter a city or address" />
+        <button id="searchButton" class="btn btn-primary mt-2">Search</button>
+    </div>
+
+    <div id="forecastArea">
+        <div id="loadingSpinner" class="loading-spinner" style="display:none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="historyPanel" class="position-fixed top-0 start-0 bg-light border-end shadow p-3"
+     style="width:260px; height:100vh; display:none; z-index:1050;">
+    <h5>Recent Searches</h5>
+    <ul id="historyList" class="list-group mt-3"></ul>
+    <button class="btn btn-secondary mt-3" onclick="hideHistory()">Close</button>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="~/js/map.js"></script>
+
+<script>
+        $("#searchButton").on("click", function () {
+
+        const term = $("#searchBox").val().trim();
+        if (!term || term.length === 0) return;
+        prepareForNewForecast();
+        showSpinner();
+        $.get("/Weather/Search?term=" + encodeURIComponent(term),
+        function (html) {
+
+            $("#forecastArea").html(html);
+            hideSpinner();
+
+            const root = document.getElementById("forecastRoot");
+            if (!root) return;
+
+            const lat = parseFloat(root.dataset.lat);
+            const lon = parseFloat(root.dataset.lon);
+
+            if (!isNaN(lat) && !isNaN(lon)) {
+                moveMapTo(lat, lon);
+            }
+        }
+        ).fail(function () {
+            hideSpinner();
+            $("#forecastArea").html("<p class='text-danger'>Error loading forecast.</p>");
+        });
+    });
+</script>
